@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-// import { Table, Button } from 'react-bootstrap';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
 
 const ProtectedTable = () => {
@@ -12,7 +11,11 @@ const ProtectedTable = () => {
             const config = { headers: { 'x-auth-token': token } };
             try {
                 const res = await axios.get('http://localhost:5000/api/users', config);
-                setUsers(res.data.map(user => ({ ...user, showPassword: false })));
+                const storedUsers = JSON.parse(localStorage.getItem('users')) || [];
+                setUsers(res.data.map(user => {
+                    const storedUser = storedUsers.find(u => u._id === user._id);
+                    return { ...user, showPassword: storedUser ? storedUser.showPassword : false };
+                }));
             } catch (err) {
                 console.error(err);
             }
@@ -22,7 +25,11 @@ const ProtectedTable = () => {
     }, []);
 
     const togglePassword = (index) => {
-        setUsers(users.map((user, i) => i === index ? { ...user, showPassword: !user.showPassword } : user));
+        setUsers(prevUsers => {
+            const newUsers = prevUsers.map((user, i) => i === index ? { ...user, showPassword: !user.showPassword } : user);
+            localStorage.setItem('users', JSON.stringify(newUsers));
+            return newUsers;
+        });
     };
 
     return (
@@ -30,6 +37,9 @@ const ProtectedTable = () => {
             <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                     <tr>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            S.No
+                        </th>
                         <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                             Name
                         </th>
@@ -48,6 +58,9 @@ const ProtectedTable = () => {
                     {users.map((user, index) => (
                         <tr key={index}>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {index + 1}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                                 {user.name}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -57,7 +70,9 @@ const ProtectedTable = () => {
                                 {user.email}
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                {user.showPassword ? user.password : '••••••••'}
+                                <div className="w-64 overflow-hidden whitespace-nowrap overflow-ellipsis">
+                                    {user.showPassword ? user.password : '••••••••'}
+                                </div>
                                 <button onClick={() => togglePassword(index)} className="ml-2">
                                     {user.showPassword ? <EyeSlashIcon className="h-5 w-5" /> : <EyeIcon className="h-5 w-5" />}
                                 </button>
