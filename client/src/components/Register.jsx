@@ -3,8 +3,7 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import { Form, Button } from 'react-bootstrap';
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -28,30 +27,49 @@ const Register = () => {
             toast.success('Registration successful');
             navigate('/protected');
         } catch (err) {
-            toast.error('Registration failed');
+            toast.error(err.response.data.msg || 'Registration failed');
         }
     };
 
     return (
-        <form onSubmit={handleSubmit} className="p-4">
-            <div>
-                <label>Name:</label>
-                <input type="text" name="name" onChange={handleChange} className="border p-2" />
-            </div>
-            <div>
-                <label>Date of Birth:</label>
-                <DatePicker selected={formData.dateOfBirth} onChange={date => setFormData({ ...formData, dateOfBirth: date })} className="border p-2" />
-            </div>
-            <div>
-                <label>Email:</label>
-                <input type="email" name="email" onChange={handleChange} className="border p-2" />
-            </div>
-            <div>
-                <label>Password:</label>
-                <input type="password" name="password" onChange={handleChange} className="border p-2" />
-            </div>
-            <button type="submit" className="bg-blue-500 text-white p-2 mt-4">Register</button>
-        </form>
+        <div className="flex items-center justify-center h-screen w-full bg-gray-200">
+            <Form onSubmit={handleSubmit} className="p-6 bg-white rounded shadow-md w-80">
+                <h2 className="text-center text-2xl mb-4">Register</h2>
+                <Form.Group className="mb-4">
+                    <Form.Label className="block text-gray-700 text-sm font-bold mb-2">Name:</Form.Label>
+                    <Form.Control type="text" name="name" onChange={handleChange} required
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                </Form.Group>
+                <Form.Group className="mb-4">
+                    <Form.Label className="block text-gray-700 text-sm font-bold mb-2">Date of Birth:</Form.Label>
+                    <Form.Control type="date" name="dateOfBirth" onChange={handleChange} required
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                </Form.Group>
+                <Form.Group className="mb-4">
+                    <Form.Label className="block text-gray-700 text-sm font-bold mb-2">Email:</Form.Label>
+                    <Form.Control type="email" name="email" onChange={handleChange} required
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                </Form.Group>
+                <Form.Group className="mb-6">
+                    <Form.Label className="block text-gray-700 text-sm font-bold mb-2">Password:</Form.Label>
+                    <Form.Control type="password" name="password" onChange={handleChange} required
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
+                </Form.Group>
+                <div className="flex items-center justify-center">
+                    <Button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline w-full">
+                        Register
+                    </Button>
+                </div>
+                <div className="flex items-center justify-center">
+                    <p className="mt-4 text-center text-sm text-gray-600">
+                        Already have an account?
+                        <a className="text-blue-500 hover:text-blue-700 underline cursor-pointer" onClick={() => navigate('/login')}>
+                            &nbsp;Login here
+                        </a>
+                    </p>
+                </div>
+            </Form>
+        </div>
     );
 };
 
