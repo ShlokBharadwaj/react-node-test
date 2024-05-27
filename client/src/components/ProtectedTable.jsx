@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Table, Button } from 'react-bootstrap';
+// import { Table, Button } from 'react-bootstrap';
 import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
 
 const ProtectedTable = () => {
     const [users, setUsers] = useState([]);
-    const [showPassword, setShowPassword] = useState(false);
 
     useEffect(() => {
         const fetchUsers = async () => {
@@ -13,7 +12,7 @@ const ProtectedTable = () => {
             const config = { headers: { 'x-auth-token': token } };
             try {
                 const res = await axios.get('http://localhost:5000/api/users', config);
-                setUsers(res.data);
+                setUsers(res.data.map(user => ({ ...user, showPassword: false })));
             } catch (err) {
                 console.error(err);
             }
@@ -22,34 +21,51 @@ const ProtectedTable = () => {
         fetchUsers();
     }, []);
 
+    const togglePassword = (index) => {
+        setUsers(users.map((user, i) => i === index ? { ...user, showPassword: !user.showPassword } : user));
+    };
+
     return (
-        <div className="container mt-5">
-            <Table striped bordered hover className="shadow">
-                <thead className="bg-primary text-white">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 mt-5">
+            <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
                     <tr>
-                        <th>Name</th>
-                        <th>Date of Birth</th>
-                        <th>Email</th>
-                        <th>Password</th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Name
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Date of Birth
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Email
+                        </th>
+                        <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            Password
+                        </th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody className="bg-white divide-y divide-gray-200">
                     {users.map((user, index) => (
                         <tr key={index}>
-                            <td>{user.name}</td>
-                            <td>{new Date(user.dateOfBirth).toLocaleDateString()}</td>
-                            <td>{user.email}</td>
-                            <td>
-                                {console.log(user.password)}
-                                {showPassword ? user.password : '••••••••'}
-                                <Button variant="link" onClick={() => setShowPassword(!showPassword)}>
-                                    {showPassword ? <EyeSlashIcon className="h-5 w-5" /> : <EyeIcon className="h-5 w-5" />}
-                                </Button>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {user.name}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {new Date(user.dateOfBirth).toLocaleDateString()}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {user.email}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                {user.showPassword ? user.password : '••••••••'}
+                                <button onClick={() => togglePassword(index)} className="ml-2">
+                                    {user.showPassword ? <EyeSlashIcon className="h-5 w-5" /> : <EyeIcon className="h-5 w-5" />}
+                                </button>
                             </td>
                         </tr>
                     ))}
                 </tbody>
-            </Table>
+            </table>
         </div>
     );
 };
