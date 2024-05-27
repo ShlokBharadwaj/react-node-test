@@ -58,7 +58,7 @@ router.post('/login', async (req, res) => {
 
 router.get('/users', auth, async (req, res) => {
     try {
-        const users = await User.find().select('-password');
+        const users = await User.find();
         res.json(users);
     } catch (err) {
         console.error(err.message);
