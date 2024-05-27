@@ -15,6 +15,7 @@ const Login = () => {
         try {
             const res = await axios.post('http://localhost:5000/api/login', { email, password });
             localStorage.setItem('token', res.data.token);
+            window.dispatchEvent(new Event('login'));
             toast('Login successful');
             navigate('/protected');
         } catch (err) {
@@ -36,7 +37,7 @@ const Login = () => {
                     <Form.Control type="password" value={password} onChange={(e) => setPassword(e.target.value)} required
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" />
                 </Form.Group>
-                <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+                <Button type="submit" className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" >
                     Login
                 </Button>
                 <p className="mt-4 text-center text-sm text-gray-600">
