@@ -32,7 +32,7 @@ const Register = () => {
     };
 
     return (
-        <div className="flex items-center justify-center h-screen w-full bg-gray-200">
+        <div className="flex items-center justify-center">
             <Form onSubmit={handleSubmit} className="p-6 bg-white rounded shadow-md w-80">
                 <h2 className="text-center text-2xl mb-4">Register</h2>
                 <Form.Group className="mb-4">
