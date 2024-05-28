@@ -26,7 +26,7 @@ const App = () => {
   }, []);
 
   if (isAuthenticated === null) {
-    return <div>Loading...</div>; // or some loading spinner
+    return <div>Loading...</div>;
   }
 
   return (
