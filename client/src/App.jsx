@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ProtectedPage from './pages/ProtectedPage';
-// import Logout from "./components/Logout";
+import Logout from "./components/Logout";
 import { ToastContainer } from 'react-toastify';
 
 const App = () => {
@@ -32,7 +32,7 @@ const App = () => {
   return (
     <Router>
       <ToastContainer />
-      {/* {isAuthenticated() && <Logout />} */}
+      {/* {isAuthenticated && <Logout />} */}
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline'
+import { EyeIcon, EyeSlashIcon } from '@heroicons/react/24/outline';
+import Logout from "./Logout";
 
 const ProtectedTable = () => {
     const [users, setUsers] = useState([]);
@@ -34,6 +35,9 @@ const ProtectedTable = () => {
 
     return (
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 mt-5">
+            <div className="mb-10">
+                <Logout />
+            </div>
             <table className="min-w-full divide-y divide-gray-200">
                 <thead className="bg-gray-50">
                     <tr>
