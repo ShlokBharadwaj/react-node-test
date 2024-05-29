@@ -40,7 +40,7 @@
 
 9. Open [http://localhost:5000](http://localhost:5000) to view the backend in the browser.
 
-## Using Picster
+## Using react-node-test
 
 To run the application on your local machine, follow these steps:
 
